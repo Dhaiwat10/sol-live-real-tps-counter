@@ -3,6 +3,14 @@ import { Connection } from '@solana/web3.js'
 
 const DEFAULT_RPC = 'https://solana-rpc.publicnode.com'
 
+interface PerfSampleWithNonVote {
+  numTransactions: number
+  numNonVoteTransactions: number
+  numSlots: number
+  samplePeriodSecs: number
+  slot: number
+}
+
 interface TPSData {
   realTPS: number
   totalTPS: number
@@ -31,7 +39,7 @@ function App() {
 
     const fetchTPS = async () => {
       try {
-        const samples = await connectionRef.current!.getRecentPerformanceSamples(5)
+        const samples = await connectionRef.current!.getRecentPerformanceSamples(5) as PerfSampleWithNonVote[]
 
         if (!samples || samples.length === 0) {
           throw new Error('No performance samples available')
